@@ -1,0 +1,32 @@
+name: System monitoring tests
+
+on: [push]
+
+env:
+  GO111MODULE: "on"
+  GOLANG_VERSION: ~1.25
+  GOLANGCI_LINT_VERSION: v2.7.2
+  
+jobs:
+  tests_by_makefile:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Set up Go
+          uses: actions/setup-go@v3
+          with:
+            go-version: ${{ env.GOLANG_VERSION }}
+
+        - name: Check out code
+          uses: actions/checkout@v3
+
+        - name: lint project
+          run: make lint
+          working-directory: ./
+
+        # - name: build project
+        #   run: make build
+        #   working-directory: ./
+
+        # - name: test project
+        #   run: make test
+        #   working-directory: ./

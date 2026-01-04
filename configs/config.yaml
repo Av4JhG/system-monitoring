@@ -1,0 +1,18 @@
+app:
+  max_seconds: 600
+
+metric:
+  cpu: true
+  load_avg: true
+  load_disk: true
+  use_fs: true
+  top_talkers_network: true
+  network_stat: true
+
+log:
+  level: "info"
+  file: "app.log"
+    
+server:
+  host: "localhost"
+  port: 8000

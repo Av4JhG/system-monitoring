@@ -100,8 +100,19 @@ type ClientData struct {
 
 // Logger представляет логгер.
 type Logger interface {
-	Debug(args ...interface{})
-	Info(args ...interface{})
-	Error(args ...interface{})
-	Fatal(args ...interface{})
+	Debug(msg string, args ...interface{})
+	Info(msg string, args ...interface{})
+	Error(msg string, args ...interface{})
+}
+
+// NewClienter представляет интерфейс для подключения новых клиентов.
+type NewClienter interface {
+	// возвращает канал для получения отсылаемых данных и ф-ия отключения клиента
+	NewClient(ClientData) (<-chan *Stats, func(), error)
+}
+
+// GRPCServer представляет gRPC сервер.
+type GRPCServer interface {
+	Start(addr string) error
+	Stop(ctx context.Context)
 }

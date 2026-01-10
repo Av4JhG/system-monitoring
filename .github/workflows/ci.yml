@@ -23,9 +23,9 @@ jobs:
           run: make lint
           working-directory: ./
 
-        # - name: build project
-        #   run: make build
-        #   working-directory: ./
+        - name: build project
+          run: make build
+          working-directory: ./
 
         # - name: test project
         #   run: make test

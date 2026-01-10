@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package statistics;
+
+service Sm {
+  rpc GetStats (SystemStatisticsRequest) returns (stream SystemStatistics) {}
+}
+
+option go_package = ".;grpc";
+
+message LoadAvg {
+  double Load1 = 1;
+  double Load5 = 2;
+  double Load15 = 3;
+}
+
+message CPU {
+  double User = 1;
+  double System = 2;
+  double Idle = 3;
+}
+
+message LoadDisk {
+  string Name = 1;
+  double Tps = 2;
+  double KBRead = 3;
+  double KBWrite = 4;
+}
+
+message UsedFS {
+  string Path = 1;
+  double UsedSpace = 2;
+  double UsedInode = 3;
+}
+
+message SystemStatistics {
+  google.protobuf.Timestamp time = 1;
+  LoadAvg load_avg = 2;
+  CPU cpu = 3;
+  repeated LoadDisk load_disks = 4;
+  repeated UsedFS used_fs = 5;
+}
+
+message SystemStatisticsRequest {
+  int32 N = 1;
+  int32 M = 2;
+}
+
+

@@ -7,6 +7,7 @@ LDFLAGS := -X main.release="develop" -X main.buildDate=$(shell date -u +%Y-%m-%d
 
 build:
 	go build -v -o ./bin/sm_app/daemon -ldflags "$(LDFLAGS)" ./cmd/daemon
+	go build -v -o ./bin/sm_app/client -ldflags "$(LDFLAGS)" ./cmd/client
 
 run: build
 	$(BIN) -config ./configs/config.yaml

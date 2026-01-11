@@ -7,6 +7,7 @@ import (
 
 	"github.com/Av4JhG/system-monitoring/config"
 	"github.com/Av4JhG/system-monitoring/internal/sm"
+	protobuf "github.com/Av4JhG/system-monitoring/pb"
 	"google.golang.org/grpc"
 )
 
@@ -26,7 +27,7 @@ func NewServer(log sm.Logger, config config.Config) sm.GRPCServer {
 	}
 }
 
-func (g *grpcServer) Start(addr string) error {
+func (g *grpcServer) Start(addr string, clients sm.NewClienter) error {
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
@@ -35,6 +36,8 @@ func (g *grpcServer) Start(addr string) error {
 	g.mutex.Lock()
 	g.srv = grpc.NewServer()
 	g.mutex.Unlock()
+
+	protobuf.RegisterSmServer(g.srv, newService(g.log, g.config, clients))
 
 	g.log.Debug("starting grpc server on ", addr)
 

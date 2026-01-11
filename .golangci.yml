@@ -71,6 +71,9 @@ linters:
             - os/exec
             - sync
             - net
+            - path/filepath
+            - strings
+            - strconv
             - github.com/spf13/viper
             - gopkg.in/natefinch/lumberjack.v2
             - google.golang.org/grpc
@@ -78,6 +81,7 @@ linters:
             - google.golang.org/grpc/codes
             - google.golang.org/grpc/status
             - google.golang.org/protobuf/types/known/timestamppb
+            - github.com/Av4JhG/system-monitoring/internal/core
             - github.com/Av4JhG/system-monitoring/pb
             - github.com/Av4JhG/system-monitoring/internal/sm
             - github.com/Av4JhG/system-monitoring/config

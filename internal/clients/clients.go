@@ -1,0 +1,150 @@
+package clients
+
+import (
+	"context"
+	"sync"
+	"time"
+
+	"github.com/Av4JhG/system-monitoring/internal/sm"
+)
+
+type clients struct {
+	ctx         context.Context // управление остановкой сервиса
+	ctxCancel   context.CancelFunc
+	closedCh    chan interface{}
+	mutex       *sync.Mutex
+	clients     clientsList // список клиентов
+	toClientsCh <-chan sm.MetricsData
+	log         sm.Logger
+}
+
+// NewClients возвращает сервис клиентов.
+func NewClients(log sm.Logger) sm.Clients {
+	return &clients{
+		log: log,
+	}
+}
+
+func (c *clients) Start(_ context.Context, toClientsCh <-chan sm.MetricsData) {
+	c.toClientsCh = toClientsCh
+
+	c.ctx, c.ctxCancel = context.WithCancel(context.Background())
+	c.closedCh = make(chan interface{})
+	c.mutex = &sync.Mutex{}
+	c.clients = nil
+
+	go c.work()
+}
+
+func (c *clients) Stop(ctx context.Context) {
+	c.ctxCancel()
+
+	select {
+	case <-ctx.Done():
+		return
+	case <-c.closedCh:
+	}
+
+	c.closeClients()
+
+	c.log.Debug("clients is stopped")
+}
+
+func (c *clients) closeClients() {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	for _, client := range c.clients {
+		client.close()
+	}
+}
+
+func (c *clients) work() {
+	defer func() {
+		c.mutex.Lock()
+		close(c.closedCh)
+		c.mutex.Unlock()
+	}()
+
+	for {
+		select {
+		case <-c.ctx.Done():
+			return
+		default:
+		}
+
+		select {
+		case <-c.ctx.Done():
+			return
+		case data := <-c.toClientsCh:
+			c.sendStat(&data)
+		}
+	}
+}
+
+// подключение нового клиента.
+func (c *clients) NewClient(cl sm.ClientData) (<-chan *sm.Stats, func(), error) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	select {
+	case <-c.closedCh:
+		return nil, nil, sm.ErrStopped
+	default:
+	}
+
+	now := time.Now().Truncate(time.Second)
+	client := newClient(cl, now)
+
+	c.clients = append(c.clients, client)
+
+	delClient := func() {
+		c.mutex.Lock()
+		defer c.mutex.Unlock()
+
+		client.dead = true
+	}
+
+	return client.ch, delClient, nil
+}
+
+func (c *clients) sendStat(data *sm.MetricsData) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	if len(c.clients) == 0 {
+		return
+	}
+
+	from := time.Now()
+	defer func() { c.log.Debug("stats sent in ", time.Since(from)) }()
+
+	now := data.Time
+	results := make(map[int]*sm.Stats)
+
+	clients := make(clientsList, 0, len(c.clients))
+	for _, client := range c.clients {
+		if client.dead {
+			client.close()
+			continue
+		}
+		clients = append(clients, client)
+
+		if !client.isReady(now) {
+			continue
+		}
+		client.setNextReady(now)
+
+		stats, ok := results[client.m]
+		if !ok {
+			stats = makeSnapshot(data, client.m)
+			results[client.m] = stats
+		}
+
+		select {
+		case client.ch <- stats:
+		default:
+		}
+	}
+	c.clients = clients
+}

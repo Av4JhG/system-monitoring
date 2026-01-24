@@ -1,14 +1,12 @@
 PROJECT_DIR := $(CURDIR)
-BIN := "./bin/sm"
+BIN := "./bin/system_monitoring_daemon"
 BUILD_DATE := $(shell date -u +%Y-%m-%dT%H:%M:%S)
 GIT_HASH := $(shell git log --format="%h" -n 1)
 LDFLAGS := -X main.buildDate=$(BUILD_DATE) -X main.gitHash=$(GIT_HASH)
 
 .PHONY: build
 build:
-# 	go build -v -o ./bin/sm_app/daemon -ldflags "$(LDFLAGS)" ./cmd/daemon
-# 	go build -v -o ./bin/sm_app/client -ldflags "$(LDFLAGS)" ./cmd/client
-	go build -v -o $(BIN) -ldflags "$(LDFLAGS)" ./cmd/sm
+	go build -v -o $(BIN) -ldflags "$(LDFLAGS)" ./cmd/daemon
 
 .PHONY: run
 run: build

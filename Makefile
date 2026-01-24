@@ -1,17 +1,18 @@
-DOCKER_IMG="sm_app:dev"
-
 PROJECT_DIR := $(CURDIR)
-
+BIN := "./bin/system_monitoring_daemon"
+BUILD_DATE := $(shell date -u +%Y-%m-%dT%H:%M:%S)
 GIT_HASH := $(shell git log --format="%h" -n 1)
-LDFLAGS := -X main.release="develop" -X main.buildDate=$(shell date -u +%Y-%m-%dT%H:%M:%S) -X main.gitHash=$(GIT_HASH)
+LDFLAGS := -X main.buildDate=$(BUILD_DATE) -X main.gitHash=$(GIT_HASH)
 
+.PHONY: build
 build:
-	go build -v -o ./bin/sm_app/daemon -ldflags "$(LDFLAGS)" ./cmd/daemon
-	go build -v -o ./bin/sm_app/client -ldflags "$(LDFLAGS)" ./cmd/client
+	go build -v -o $(BIN) -ldflags "$(LDFLAGS)" ./cmd/daemon
 
+.PHONY: run
 run: build
-	$(BIN) -config ./configs/config.yaml
+	LOG_LEVEL=DEBUG $(BIN) -config ./config/config.yaml
 
+.PHONY: version
 version: build
 	$(BIN) version
 

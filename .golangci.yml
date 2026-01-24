@@ -54,37 +54,50 @@ linters:
     gosec:
       excludes:
         - G115
+    exhaustive:
+      default-signifies-exhaustive: true
     depguard:
       rules:
         main:
           allow:
-            - fmt
-            - time
-            - context
             - bufio
+            - context
             - errors
             - flag
+            - fmt
             - io
             - log
             - math/rand
+            - net
             - os
             - os/exec
-            - sync
-            - net
+            - os/signal
             - path/filepath
-            - strings
             - strconv
+            - strings
+            - syscall
+            - sync
+            - time
             - github.com/spf13/viper
             - gopkg.in/natefinch/lumberjack.v2
             - google.golang.org/grpc
             - google.golang.org/grpc/credentials/insecure
             - google.golang.org/grpc/codes
             - google.golang.org/grpc/status
+            - github.com/benbjohnson/clock
             - google.golang.org/protobuf/types/known/timestamppb
             - github.com/Av4JhG/system-monitoring/internal/core
+            - github.com/Av4JhG/system-monitoring/internal/collector
+            - github.com/Av4JhG/system-monitoring/internal/cpu
+            - github.com/Av4JhG/system-monitoring/internal/clients
+            - github.com/Av4JhG/system-monitoring/internal/grpc
+            - github.com/Av4JhG/system-monitoring/internal/load_avg
+            - github.com/Av4JhG/system-monitoring/internal/load_disks
+            - github.com/Av4JhG/system-monitoring/internal/logger
             - github.com/Av4JhG/system-monitoring/pb
             - github.com/Av4JhG/system-monitoring/internal/sm
             - github.com/Av4JhG/system-monitoring/config
+            - github.com/Av4JhG/system-monitoring/internal/used_fs
             
   exclusions:
     generated: lax

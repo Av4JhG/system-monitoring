@@ -2,6 +2,7 @@ package cpu
 
 import (
 	"context"
+	"log"
 	"sync"
 
 	"github.com/Av4JhG/system-monitoring/internal/sm"
@@ -26,8 +27,8 @@ func Collect(_ context.Context, action sm.MetricCommand) (*sm.CPUData, error) {
 		return nil, start()
 	case sm.StopMetric:
 		return nil, nil
-	case sm.GetMetric:
-		return nil, nil
+	// case sm.GetMetric:
+	// 	return nil, nil
 	default:
 		return get()
 	}
@@ -72,5 +73,6 @@ func get() (*sm.CPUData, error) {
 		Idle:   (data.idle - prevData.idle) / total * 100,
 	}
 	prevData = data
+	log.Println(result)
 	return result, nil
 }

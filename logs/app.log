@@ -1,0 +1,26 @@
+{"time":"2026-01-24 00:11:24","level":"INFO","msg":"starting system monitor"}
+{"time":"2026-01-24 00:11:24","level":"INFO","msg":"time to keep metrics: ","!BADKEY":600,"!BADKEY":" seconds"}
+{"time":"2026-01-24 00:11:24","level":"INFO","msg":"system monitor is running..."}
+{"time":"2026-01-24 00:11:36","level":"INFO","msg":"starting system monitor"}
+{"time":"2026-01-24 00:11:36","level":"INFO","msg":"time to keep metrics: ","!BADKEY":600,"!BADKEY":" seconds"}
+{"time":"2026-01-24 00:11:36","level":"INFO","msg":"system monitor is running..."}
+{"time":"2026-01-24 00:12:17","level":"INFO","msg":"starting system monitor"}
+{"time":"2026-01-24 00:12:17","level":"INFO","msg":"time to keep metrics: ","!BADKEY":600,"!BADKEY":" seconds"}
+{"time":"2026-01-24 00:12:17","level":"INFO","msg":"system monitor is running..."}
+{"time":"2026-01-24 00:12:46","level":"INFO","msg":"stopping system monitor..."}
+{"time":"2026-01-24 00:12:46","level":"INFO","msg":"system monitor is stopped"}
+{"time":"2026-01-24 00:12:55","level":"INFO","msg":"starting system monitor"}
+{"time":"2026-01-24 00:12:55","level":"INFO","msg":"time to keep metrics: ","!BADKEY":600,"!BADKEY":" seconds"}
+{"time":"2026-01-24 00:12:55","level":"INFO","msg":"system monitor is running..."}
+{"time":"2026-01-24 00:13:17","level":"INFO","msg":"stopping system monitor..."}
+{"time":"2026-01-24 00:13:17","level":"INFO","msg":"system monitor is stopped"}
+{"time":"2026-01-24 00:25:20","level":"INFO","msg":"starting system monitor"}
+{"time":"2026-01-24 00:25:20","level":"INFO","msg":"time to keep metrics: ","!BADKEY":600,"!BADKEY":" seconds"}
+{"time":"2026-01-24 00:25:20","level":"INFO","msg":"system monitor is running..."}
+{"time":"2026-01-24 00:25:43","level":"INFO","msg":"stopping system monitor..."}
+{"time":"2026-01-24 00:25:44","level":"INFO","msg":"system monitor is stopped"}
+{"time":"2026-01-24 16:50:22","level":"INFO","msg":"starting system monitor"}
+{"time":"2026-01-24 16:50:22","level":"INFO","msg":"time to keep metrics: ","!BADKEY":600,"!BADKEY":" seconds"}
+{"time":"2026-01-24 16:50:22","level":"INFO","msg":"system monitor is running..."}
+{"time":"2026-01-24 16:50:53","level":"INFO","msg":"stopping system monitor..."}
+{"time":"2026-01-24 16:50:53","level":"INFO","msg":"system monitor is stopped"}

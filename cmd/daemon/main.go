@@ -1,145 +1,103 @@
 package main
 
 import (
-	"bufio"
 	"context"
-	"errors"
 	"flag"
-	"fmt"
-	"io"
 	"log"
-	"math/rand"
 	"os"
-	"os/exec"
-	"sync"
-	"time"
+	"os/signal"
+	"syscall"
 
-	protobuf "github.com/Av4JhG/system-monitoring/pb"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	conf "github.com/Av4JhG/system-monitoring/config"
+	"github.com/Av4JhG/system-monitoring/internal/clients"
+	"github.com/Av4JhG/system-monitoring/internal/collector"
+	"github.com/Av4JhG/system-monitoring/internal/cpu"
+	"github.com/Av4JhG/system-monitoring/internal/grpc"
+	loadavg "github.com/Av4JhG/system-monitoring/internal/load_avg"
+	loaddisks "github.com/Av4JhG/system-monitoring/internal/load_disks"
+	"github.com/Av4JhG/system-monitoring/internal/logger"
+	"github.com/Av4JhG/system-monitoring/internal/sm"
+	usedfs "github.com/Av4JhG/system-monitoring/internal/used_fs"
+	"github.com/benbjohnson/clock"
 )
 
-var (
-	nFrom    int
-	nTo      int
-	mFrom    int
-	mTo      int
-	count    int
-	loadTime int
-)
+var configFile string
 
 func init() {
-	flag.IntVar(&nFrom, "nf", 1, "Send stats every N seconds. Low limit")
-	flag.IntVar(&nTo, "nt", 5, "Send stats every N seconds. High limit")
-	flag.IntVar(&mFrom, "mf", 5, "Send stats for last M seconds. Low limit")
-	flag.IntVar(&mTo, "mt", 30, "Send stats for last M seconds. High limit")
-	flag.IntVar(&count, "count", 100_000, "Count of clients")
-	flag.IntVar(&loadTime, "time", 600, "Wait stats for time seconds")
+	flag.StringVar(&configFile, "config", "", "Path to configuration file")
 }
 
 func main() {
 	flag.Parse()
 
-	ctx, cancel := context.WithCancel(context.Background())
+	if isVersionCommand() {
+		printVersion()
+		os.Exit(0)
+	}
 
-	cmd := exec.CommandContext(ctx, "./bin/symo")
-	cmd.Env = append(os.Environ(),
-		"LOG_LEVEL=INFO",
-	)
+	mainCtx, cancel := context.WithCancel(context.Background())
 
-	stderr, err := cmd.StderrPipe()
+	go watchSignals(mainCtx, cancel)
+
+	config, err := conf.NewConfig(configFile)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	logg, err := logger.New(config.Logger.Level)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	logg.Info("starting system monitor")
+	logg.Info("time to keep metrics: ", config.App.MaxSeconds, " seconds")
+
+	stopper := newServiceStopper()
+
+	collectors := sm.MetricCollectors{
+		LoadAvg:   loadavg.Collect,
+		CPU:       cpu.Collect,
+		LoadDisks: loaddisks.Collect,
+		UsedFS:    usedfs.Collect,
+	}
+
+	toClientsCh := make(sm.CollectorToClientsCh, 1)
+
+	clientsService := clients.NewClients(logg, clock.New())
+	clientsService.Start(mainCtx, toClientsCh)
+	stopper.add(clientsService.Stop)
+
+	collectorService := collector.NewCollector(logg, config)
+	collectorService.Start(mainCtx, collectors, toClientsCh)
+	stopper.add(collectorService.Stop)
+
+	grpcServer := grpc.NewServer(logg, config)
 	go func() {
-		scanner := bufio.NewScanner(stderr)
-		for scanner.Scan() {
-			log.Print("server: ", scanner.Text())
-		}
-	}()
-
-	err = cmd.Start()
-	if err != nil {
-		log.Fatal(err)
-	}
-	time.Sleep(3 * time.Second)
-
-	load()
-
-	cancel()
-	_ = cmd.Wait()
-}
-
-func load() {
-	conn, err := grpc.NewClient(":8000", grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer conn.Close()
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(loadTime)*time.Second)
-	defer cancel()
-
-	wg := &sync.WaitGroup{}
-	runClient(ctx, wg, conn, true, nFrom, mFrom)
-	for i := 1; i < count; i++ {
-		n := nFrom
-		if nTo > nFrom {
-			//nolint:gosec
-			n += rand.Intn(nTo - nFrom)
-		}
-		m := mFrom
-		if mTo > mFrom {
-			//nolint:gosec
-			m += rand.Intn(mTo - mFrom)
-		}
-		runClient(ctx, wg, conn, false, n, m)
-	}
-	wg.Wait()
-}
-
-func runClient(timeoutCtx context.Context, wg *sync.WaitGroup, conn grpc.ClientConnInterface, first bool, n, m int) {
-	wg.Add(1)
-
-	go func() {
-		defer wg.Done()
-
-		ctx, cancel := context.WithCancel(timeoutCtx)
-		defer cancel()
-
-		client := protobuf.NewSmClient(conn)
-		req := &protobuf.SystemStatisticsRequest{
-			N: int32(n),
-			M: int32(m),
-		}
-		reqClient, err := client.GetStats(ctx, req)
+		err := grpcServer.Start(":"+config.Server.Port, clientsService)
 		if err != nil {
-			log.Print(fmt.Errorf("client request fail: %w", err))
+			logg.Error("server start error: ", err)
+			cancel()
 			return
 		}
-
-		for {
-			stats, err := reqClient.Recv()
-			if errors.Is(timeoutCtx.Err(), context.DeadlineExceeded) ||
-				errors.Is(ctx.Err(), context.Canceled) ||
-				errors.Is(err, io.EOF) {
-				return
-			}
-			if err != nil {
-				log.Print(fmt.Errorf("error: %w", err))
-				return
-			}
-			// результаты первого клиента показываются, чтобы в консоли что-то менялось
-			if first {
-				log.Printf("%s %5.2f %5.2f %5.2f", stats.Time.AsTime(),
-					stats.Cpu.User, stats.Cpu.System, stats.Cpu.Idle)
-			}
-			// переподключение клиента
-			//nolint:gosec
-			if !first && rand.Float64() < 0.1 {
-				cancel()
-				runClient(timeoutCtx, wg, conn, first, n, m)
-			}
-		}
 	}()
+	stopper.add(grpcServer.Stop)
+
+	logg.Info("system monitor is running...")
+
+	<-mainCtx.Done()
+
+	logg.Info("stopping system monitor...")
+	stopper.stop()
+	logg.Info("system monitor is stopped")
+}
+
+func watchSignals(mainCtx context.Context, cancel context.CancelFunc) {
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
+
+	select {
+	case <-mainCtx.Done():
+	case <-signals:
+	}
+	cancel()
 }

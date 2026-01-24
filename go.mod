@@ -5,6 +5,7 @@ go 1.25.5
 require github.com/spf13/viper v1.21.0
 
 require (
+	github.com/benbjohnson/clock v1.3.5
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect

@@ -270,20 +270,561 @@ func (x *UsedFS) GetUsedInode() float64 {
 	return 0
 }
 
-type SystemStatistics struct {
+type ProtocolStats struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Time          *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=time,proto3" json:"time,omitempty"`
-	LoadAvg       *LoadAvg               `protobuf:"bytes,2,opt,name=load_avg,json=loadAvg,proto3" json:"load_avg,omitempty"`
-	Cpu           *CPU                   `protobuf:"bytes,3,opt,name=cpu,proto3" json:"cpu,omitempty"`
-	LoadDisks     []*LoadDisk            `protobuf:"bytes,4,rep,name=load_disks,json=loadDisks,proto3" json:"load_disks,omitempty"`
-	UsedFs        []*UsedFS              `protobuf:"bytes,5,rep,name=used_fs,json=usedFs,proto3" json:"used_fs,omitempty"`
+	Protocol      string                 `protobuf:"bytes,1,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	Bytes         uint64                 `protobuf:"varint,2,opt,name=bytes,proto3" json:"bytes,omitempty"`
+	Percent       float64                `protobuf:"fixed64,3,opt,name=percent,proto3" json:"percent,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *ProtocolStats) Reset() {
+	*x = ProtocolStats{}
+	mi := &file_proto_sm_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProtocolStats) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProtocolStats) ProtoMessage() {}
+
+func (x *ProtocolStats) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sm_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProtocolStats.ProtoReflect.Descriptor instead.
+func (*ProtocolStats) Descriptor() ([]byte, []int) {
+	return file_proto_sm_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ProtocolStats) GetProtocol() string {
+	if x != nil {
+		return x.Protocol
+	}
+	return ""
+}
+
+func (x *ProtocolStats) GetBytes() uint64 {
+	if x != nil {
+		return x.Bytes
+	}
+	return 0
+}
+
+func (x *ProtocolStats) GetPercent() float64 {
+	if x != nil {
+		return x.Percent
+	}
+	return 0
+}
+
+type ProtocolStatsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Stats         []*ProtocolStats       `protobuf:"bytes,1,rep,name=stats,proto3" json:"stats,omitempty"`
+	TotalBytes    uint64                 `protobuf:"varint,2,opt,name=total_bytes,json=totalBytes,proto3" json:"total_bytes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ProtocolStatsResponse) Reset() {
+	*x = ProtocolStatsResponse{}
+	mi := &file_proto_sm_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProtocolStatsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProtocolStatsResponse) ProtoMessage() {}
+
+func (x *ProtocolStatsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sm_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProtocolStatsResponse.ProtoReflect.Descriptor instead.
+func (*ProtocolStatsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_sm_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ProtocolStatsResponse) GetStats() []*ProtocolStats {
+	if x != nil {
+		return x.Stats
+	}
+	return nil
+}
+
+func (x *ProtocolStatsResponse) GetTotalBytes() uint64 {
+	if x != nil {
+		return x.TotalBytes
+	}
+	return 0
+}
+
+type TrafficStats struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Source        string                 `protobuf:"bytes,1,opt,name=source,proto3" json:"source,omitempty"`
+	Destination   string                 `protobuf:"bytes,2,opt,name=destination,proto3" json:"destination,omitempty"`
+	Protocol      string                 `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	Bps           float64                `protobuf:"fixed64,4,opt,name=bps,proto3" json:"bps,omitempty"`
+	Bytes         uint64                 `protobuf:"varint,5,opt,name=bytes,proto3" json:"bytes,omitempty"`
+	PacketsRate   float64                `protobuf:"fixed64,6,opt,name=packets_rate,json=packetsRate,proto3" json:"packets_rate,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TrafficStats) Reset() {
+	*x = TrafficStats{}
+	mi := &file_proto_sm_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TrafficStats) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TrafficStats) ProtoMessage() {}
+
+func (x *TrafficStats) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sm_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TrafficStats.ProtoReflect.Descriptor instead.
+func (*TrafficStats) Descriptor() ([]byte, []int) {
+	return file_proto_sm_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *TrafficStats) GetSource() string {
+	if x != nil {
+		return x.Source
+	}
+	return ""
+}
+
+func (x *TrafficStats) GetDestination() string {
+	if x != nil {
+		return x.Destination
+	}
+	return ""
+}
+
+func (x *TrafficStats) GetProtocol() string {
+	if x != nil {
+		return x.Protocol
+	}
+	return ""
+}
+
+func (x *TrafficStats) GetBps() float64 {
+	if x != nil {
+		return x.Bps
+	}
+	return 0
+}
+
+func (x *TrafficStats) GetBytes() uint64 {
+	if x != nil {
+		return x.Bytes
+	}
+	return 0
+}
+
+func (x *TrafficStats) GetPacketsRate() float64 {
+	if x != nil {
+		return x.PacketsRate
+	}
+	return 0
+}
+
+type TrafficStatsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Stats         []*TrafficStats        `protobuf:"bytes,1,rep,name=stats,proto3" json:"stats,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TrafficStatsResponse) Reset() {
+	*x = TrafficStatsResponse{}
+	mi := &file_proto_sm_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TrafficStatsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TrafficStatsResponse) ProtoMessage() {}
+
+func (x *TrafficStatsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sm_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TrafficStatsResponse.ProtoReflect.Descriptor instead.
+func (*TrafficStatsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_sm_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *TrafficStatsResponse) GetStats() []*TrafficStats {
+	if x != nil {
+		return x.Stats
+	}
+	return nil
+}
+
+type ListeningSocket struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Command       string                 `protobuf:"bytes,1,opt,name=command,proto3" json:"command,omitempty"`
+	Pid           int32                  `protobuf:"varint,2,opt,name=pid,proto3" json:"pid,omitempty"`
+	User          string                 `protobuf:"bytes,3,opt,name=user,proto3" json:"user,omitempty"`
+	Protocol      string                 `protobuf:"bytes,4,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	Port          int32                  `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
+	Address       string                 `protobuf:"bytes,6,opt,name=address,proto3" json:"address,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListeningSocket) Reset() {
+	*x = ListeningSocket{}
+	mi := &file_proto_sm_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListeningSocket) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListeningSocket) ProtoMessage() {}
+
+func (x *ListeningSocket) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sm_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListeningSocket.ProtoReflect.Descriptor instead.
+func (*ListeningSocket) Descriptor() ([]byte, []int) {
+	return file_proto_sm_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ListeningSocket) GetCommand() string {
+	if x != nil {
+		return x.Command
+	}
+	return ""
+}
+
+func (x *ListeningSocket) GetPid() int32 {
+	if x != nil {
+		return x.Pid
+	}
+	return 0
+}
+
+func (x *ListeningSocket) GetUser() string {
+	if x != nil {
+		return x.User
+	}
+	return ""
+}
+
+func (x *ListeningSocket) GetProtocol() string {
+	if x != nil {
+		return x.Protocol
+	}
+	return ""
+}
+
+func (x *ListeningSocket) GetPort() int32 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
+}
+
+func (x *ListeningSocket) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+type ListeningSocketResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Sockets       []*ListeningSocket     `protobuf:"bytes,1,rep,name=sockets,proto3" json:"sockets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListeningSocketResponse) Reset() {
+	*x = ListeningSocketResponse{}
+	mi := &file_proto_sm_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListeningSocketResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListeningSocketResponse) ProtoMessage() {}
+
+func (x *ListeningSocketResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sm_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListeningSocketResponse.ProtoReflect.Descriptor instead.
+func (*ListeningSocketResponse) Descriptor() ([]byte, []int) {
+	return file_proto_sm_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ListeningSocketResponse) GetSockets() []*ListeningSocket {
+	if x != nil {
+		return x.Sockets
+	}
+	return nil
+}
+
+type TCPStateCount struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	State         string                 `protobuf:"bytes,1,opt,name=state,proto3" json:"state,omitempty"`
+	Count         int32                  `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TCPStateCount) Reset() {
+	*x = TCPStateCount{}
+	mi := &file_proto_sm_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TCPStateCount) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TCPStateCount) ProtoMessage() {}
+
+func (x *TCPStateCount) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sm_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TCPStateCount.ProtoReflect.Descriptor instead.
+func (*TCPStateCount) Descriptor() ([]byte, []int) {
+	return file_proto_sm_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *TCPStateCount) GetState() string {
+	if x != nil {
+		return x.State
+	}
+	return ""
+}
+
+func (x *TCPStateCount) GetCount() int32 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+type TCPStatesResponse struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	TCPStates        []*TCPStateCount       `protobuf:"bytes,1,rep,name=TCPStates,proto3" json:"TCPStates,omitempty"`
+	TotalConnections int32                  `protobuf:"varint,2,opt,name=total_connections,json=totalConnections,proto3" json:"total_connections,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *TCPStatesResponse) Reset() {
+	*x = TCPStatesResponse{}
+	mi := &file_proto_sm_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TCPStatesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TCPStatesResponse) ProtoMessage() {}
+
+func (x *TCPStatesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sm_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TCPStatesResponse.ProtoReflect.Descriptor instead.
+func (*TCPStatesResponse) Descriptor() ([]byte, []int) {
+	return file_proto_sm_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *TCPStatesResponse) GetTCPStates() []*TCPStateCount {
+	if x != nil {
+		return x.TCPStates
+	}
+	return nil
+}
+
+func (x *TCPStatesResponse) GetTotalConnections() int32 {
+	if x != nil {
+		return x.TotalConnections
+	}
+	return 0
+}
+
+type NetworkStats struct {
+	state            protoimpl.MessageState   `protogen:"open.v1"`
+	ProtocolStats    *ProtocolStatsResponse   `protobuf:"bytes,1,opt,name=protocol_stats,json=protocolStats,proto3" json:"protocol_stats,omitempty"`
+	TrafficStats     *TrafficStatsResponse    `protobuf:"bytes,2,opt,name=traffic_stats,json=trafficStats,proto3" json:"traffic_stats,omitempty"`
+	ListeningSockets *ListeningSocketResponse `protobuf:"bytes,3,opt,name=listening_sockets,json=listeningSockets,proto3" json:"listening_sockets,omitempty"`
+	TcpStates        *TCPStatesResponse       `protobuf:"bytes,4,opt,name=tcp_states,json=tcpStates,proto3" json:"tcp_states,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *NetworkStats) Reset() {
+	*x = NetworkStats{}
+	mi := &file_proto_sm_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NetworkStats) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NetworkStats) ProtoMessage() {}
+
+func (x *NetworkStats) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_sm_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NetworkStats.ProtoReflect.Descriptor instead.
+func (*NetworkStats) Descriptor() ([]byte, []int) {
+	return file_proto_sm_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *NetworkStats) GetProtocolStats() *ProtocolStatsResponse {
+	if x != nil {
+		return x.ProtocolStats
+	}
+	return nil
+}
+
+func (x *NetworkStats) GetTrafficStats() *TrafficStatsResponse {
+	if x != nil {
+		return x.TrafficStats
+	}
+	return nil
+}
+
+func (x *NetworkStats) GetListeningSockets() *ListeningSocketResponse {
+	if x != nil {
+		return x.ListeningSockets
+	}
+	return nil
+}
+
+func (x *NetworkStats) GetTcpStates() *TCPStatesResponse {
+	if x != nil {
+		return x.TcpStates
+	}
+	return nil
+}
+
+type SystemStatistics struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Time              *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=time,proto3" json:"time,omitempty"`
+	LoadAvg           *LoadAvg               `protobuf:"bytes,2,opt,name=load_avg,json=loadAvg,proto3" json:"load_avg,omitempty"`
+	Cpu               *CPU                   `protobuf:"bytes,3,opt,name=cpu,proto3" json:"cpu,omitempty"`
+	LoadDisks         []*LoadDisk            `protobuf:"bytes,4,rep,name=load_disks,json=loadDisks,proto3" json:"load_disks,omitempty"`
+	UsedFs            []*UsedFS              `protobuf:"bytes,5,rep,name=used_fs,json=usedFs,proto3" json:"used_fs,omitempty"`
+	NetworkStatistics *NetworkStats          `protobuf:"bytes,6,opt,name=network_statistics,json=networkStatistics,proto3" json:"network_statistics,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
 func (x *SystemStatistics) Reset() {
 	*x = SystemStatistics{}
-	mi := &file_proto_sm_proto_msgTypes[4]
+	mi := &file_proto_sm_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -295,7 +836,7 @@ func (x *SystemStatistics) String() string {
 func (*SystemStatistics) ProtoMessage() {}
 
 func (x *SystemStatistics) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sm_proto_msgTypes[4]
+	mi := &file_proto_sm_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -308,7 +849,7 @@ func (x *SystemStatistics) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SystemStatistics.ProtoReflect.Descriptor instead.
 func (*SystemStatistics) Descriptor() ([]byte, []int) {
-	return file_proto_sm_proto_rawDescGZIP(), []int{4}
+	return file_proto_sm_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *SystemStatistics) GetTime() *timestamppb.Timestamp {
@@ -346,6 +887,13 @@ func (x *SystemStatistics) GetUsedFs() []*UsedFS {
 	return nil
 }
 
+func (x *SystemStatistics) GetNetworkStatistics() *NetworkStats {
+	if x != nil {
+		return x.NetworkStatistics
+	}
+	return nil
+}
+
 type SystemStatisticsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	N             int32                  `protobuf:"varint,1,opt,name=N,proto3" json:"N,omitempty"`
@@ -356,7 +904,7 @@ type SystemStatisticsRequest struct {
 
 func (x *SystemStatisticsRequest) Reset() {
 	*x = SystemStatisticsRequest{}
-	mi := &file_proto_sm_proto_msgTypes[5]
+	mi := &file_proto_sm_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -368,7 +916,7 @@ func (x *SystemStatisticsRequest) String() string {
 func (*SystemStatisticsRequest) ProtoMessage() {}
 
 func (x *SystemStatisticsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sm_proto_msgTypes[5]
+	mi := &file_proto_sm_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -381,7 +929,7 @@ func (x *SystemStatisticsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SystemStatisticsRequest.ProtoReflect.Descriptor instead.
 func (*SystemStatisticsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_sm_proto_rawDescGZIP(), []int{5}
+	return file_proto_sm_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *SystemStatisticsRequest) GetN() int32 {
@@ -420,14 +968,53 @@ const file_proto_sm_proto_rawDesc = "" +
 	"\x06UsedFS\x12\x12\n" +
 	"\x04Path\x18\x01 \x01(\tR\x04Path\x12\x1c\n" +
 	"\tUsedSpace\x18\x02 \x01(\x01R\tUsedSpace\x12\x1c\n" +
-	"\tUsedInode\x18\x03 \x01(\x01R\tUsedInode\"\xf7\x01\n" +
+	"\tUsedInode\x18\x03 \x01(\x01R\tUsedInode\"[\n" +
+	"\rProtocolStats\x12\x1a\n" +
+	"\bprotocol\x18\x01 \x01(\tR\bprotocol\x12\x14\n" +
+	"\x05bytes\x18\x02 \x01(\x04R\x05bytes\x12\x18\n" +
+	"\apercent\x18\x03 \x01(\x01R\apercent\"i\n" +
+	"\x15ProtocolStatsResponse\x12/\n" +
+	"\x05stats\x18\x01 \x03(\v2\x19.statistics.ProtocolStatsR\x05stats\x12\x1f\n" +
+	"\vtotal_bytes\x18\x02 \x01(\x04R\n" +
+	"totalBytes\"\xaf\x01\n" +
+	"\fTrafficStats\x12\x16\n" +
+	"\x06source\x18\x01 \x01(\tR\x06source\x12 \n" +
+	"\vdestination\x18\x02 \x01(\tR\vdestination\x12\x1a\n" +
+	"\bprotocol\x18\x03 \x01(\tR\bprotocol\x12\x10\n" +
+	"\x03bps\x18\x04 \x01(\x01R\x03bps\x12\x14\n" +
+	"\x05bytes\x18\x05 \x01(\x04R\x05bytes\x12!\n" +
+	"\fpackets_rate\x18\x06 \x01(\x01R\vpacketsRate\"F\n" +
+	"\x14TrafficStatsResponse\x12.\n" +
+	"\x05stats\x18\x01 \x03(\v2\x18.statistics.TrafficStatsR\x05stats\"\x9b\x01\n" +
+	"\x0fListeningSocket\x12\x18\n" +
+	"\acommand\x18\x01 \x01(\tR\acommand\x12\x10\n" +
+	"\x03pid\x18\x02 \x01(\x05R\x03pid\x12\x12\n" +
+	"\x04user\x18\x03 \x01(\tR\x04user\x12\x1a\n" +
+	"\bprotocol\x18\x04 \x01(\tR\bprotocol\x12\x12\n" +
+	"\x04port\x18\x05 \x01(\x05R\x04port\x12\x18\n" +
+	"\aaddress\x18\x06 \x01(\tR\aaddress\"P\n" +
+	"\x17ListeningSocketResponse\x125\n" +
+	"\asockets\x18\x01 \x03(\v2\x1b.statistics.ListeningSocketR\asockets\";\n" +
+	"\rTCPStateCount\x12\x14\n" +
+	"\x05state\x18\x01 \x01(\tR\x05state\x12\x14\n" +
+	"\x05count\x18\x02 \x01(\x05R\x05count\"y\n" +
+	"\x11TCPStatesResponse\x127\n" +
+	"\tTCPStates\x18\x01 \x03(\v2\x19.statistics.TCPStateCountR\tTCPStates\x12+\n" +
+	"\x11total_connections\x18\x02 \x01(\x05R\x10totalConnections\"\xaf\x02\n" +
+	"\fNetworkStats\x12H\n" +
+	"\x0eprotocol_stats\x18\x01 \x01(\v2!.statistics.ProtocolStatsResponseR\rprotocolStats\x12E\n" +
+	"\rtraffic_stats\x18\x02 \x01(\v2 .statistics.TrafficStatsResponseR\ftrafficStats\x12P\n" +
+	"\x11listening_sockets\x18\x03 \x01(\v2#.statistics.ListeningSocketResponseR\x10listeningSockets\x12<\n" +
+	"\n" +
+	"tcp_states\x18\x04 \x01(\v2\x1d.statistics.TCPStatesResponseR\ttcpStates\"\xc0\x02\n" +
 	"\x10SystemStatistics\x12.\n" +
 	"\x04time\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x04time\x12.\n" +
 	"\bload_avg\x18\x02 \x01(\v2\x13.statistics.LoadAvgR\aloadAvg\x12!\n" +
 	"\x03cpu\x18\x03 \x01(\v2\x0f.statistics.CPUR\x03cpu\x123\n" +
 	"\n" +
 	"load_disks\x18\x04 \x03(\v2\x14.statistics.LoadDiskR\tloadDisks\x12+\n" +
-	"\aused_fs\x18\x05 \x03(\v2\x12.statistics.UsedFSR\x06usedFs\"5\n" +
+	"\aused_fs\x18\x05 \x03(\v2\x12.statistics.UsedFSR\x06usedFs\x12G\n" +
+	"\x12network_statistics\x18\x06 \x01(\v2\x18.statistics.NetworkStatsR\x11networkStatistics\"5\n" +
 	"\x17SystemStatisticsRequest\x12\f\n" +
 	"\x01N\x18\x01 \x01(\x05R\x01N\x12\f\n" +
 	"\x01M\x18\x02 \x01(\x05R\x01M2W\n" +
@@ -446,29 +1033,47 @@ func file_proto_sm_proto_rawDescGZIP() []byte {
 	return file_proto_sm_proto_rawDescData
 }
 
-var file_proto_sm_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_proto_sm_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_proto_sm_proto_goTypes = []any{
 	(*LoadAvg)(nil),                 // 0: statistics.LoadAvg
 	(*CPU)(nil),                     // 1: statistics.CPU
 	(*LoadDisk)(nil),                // 2: statistics.LoadDisk
 	(*UsedFS)(nil),                  // 3: statistics.UsedFS
-	(*SystemStatistics)(nil),        // 4: statistics.SystemStatistics
-	(*SystemStatisticsRequest)(nil), // 5: statistics.SystemStatisticsRequest
-	(*timestamppb.Timestamp)(nil),   // 6: google.protobuf.Timestamp
+	(*ProtocolStats)(nil),           // 4: statistics.ProtocolStats
+	(*ProtocolStatsResponse)(nil),   // 5: statistics.ProtocolStatsResponse
+	(*TrafficStats)(nil),            // 6: statistics.TrafficStats
+	(*TrafficStatsResponse)(nil),    // 7: statistics.TrafficStatsResponse
+	(*ListeningSocket)(nil),         // 8: statistics.ListeningSocket
+	(*ListeningSocketResponse)(nil), // 9: statistics.ListeningSocketResponse
+	(*TCPStateCount)(nil),           // 10: statistics.TCPStateCount
+	(*TCPStatesResponse)(nil),       // 11: statistics.TCPStatesResponse
+	(*NetworkStats)(nil),            // 12: statistics.NetworkStats
+	(*SystemStatistics)(nil),        // 13: statistics.SystemStatistics
+	(*SystemStatisticsRequest)(nil), // 14: statistics.SystemStatisticsRequest
+	(*timestamppb.Timestamp)(nil),   // 15: google.protobuf.Timestamp
 }
 var file_proto_sm_proto_depIdxs = []int32{
-	6, // 0: statistics.SystemStatistics.time:type_name -> google.protobuf.Timestamp
-	0, // 1: statistics.SystemStatistics.load_avg:type_name -> statistics.LoadAvg
-	1, // 2: statistics.SystemStatistics.cpu:type_name -> statistics.CPU
-	2, // 3: statistics.SystemStatistics.load_disks:type_name -> statistics.LoadDisk
-	3, // 4: statistics.SystemStatistics.used_fs:type_name -> statistics.UsedFS
-	5, // 5: statistics.Sm.GetStats:input_type -> statistics.SystemStatisticsRequest
-	4, // 6: statistics.Sm.GetStats:output_type -> statistics.SystemStatistics
-	6, // [6:7] is the sub-list for method output_type
-	5, // [5:6] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	4,  // 0: statistics.ProtocolStatsResponse.stats:type_name -> statistics.ProtocolStats
+	6,  // 1: statistics.TrafficStatsResponse.stats:type_name -> statistics.TrafficStats
+	8,  // 2: statistics.ListeningSocketResponse.sockets:type_name -> statistics.ListeningSocket
+	10, // 3: statistics.TCPStatesResponse.TCPStates:type_name -> statistics.TCPStateCount
+	5,  // 4: statistics.NetworkStats.protocol_stats:type_name -> statistics.ProtocolStatsResponse
+	7,  // 5: statistics.NetworkStats.traffic_stats:type_name -> statistics.TrafficStatsResponse
+	9,  // 6: statistics.NetworkStats.listening_sockets:type_name -> statistics.ListeningSocketResponse
+	11, // 7: statistics.NetworkStats.tcp_states:type_name -> statistics.TCPStatesResponse
+	15, // 8: statistics.SystemStatistics.time:type_name -> google.protobuf.Timestamp
+	0,  // 9: statistics.SystemStatistics.load_avg:type_name -> statistics.LoadAvg
+	1,  // 10: statistics.SystemStatistics.cpu:type_name -> statistics.CPU
+	2,  // 11: statistics.SystemStatistics.load_disks:type_name -> statistics.LoadDisk
+	3,  // 12: statistics.SystemStatistics.used_fs:type_name -> statistics.UsedFS
+	12, // 13: statistics.SystemStatistics.network_statistics:type_name -> statistics.NetworkStats
+	14, // 14: statistics.Sm.GetStats:input_type -> statistics.SystemStatisticsRequest
+	13, // 15: statistics.Sm.GetStats:output_type -> statistics.SystemStatistics
+	15, // [15:16] is the sub-list for method output_type
+	14, // [14:15] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_proto_sm_proto_init() }
@@ -482,7 +1087,7 @@ func file_proto_sm_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_sm_proto_rawDesc), len(file_proto_sm_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

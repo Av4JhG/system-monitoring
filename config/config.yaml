@@ -1,13 +1,13 @@
 app:
-  max_seconds: 600
+  maxSeconds: 600
 
 metric:
   cpu: true
-  load_avg: true
-  load_disk: true
-  use_fs: true
-  top_talkers_network: true
-  network_stat: true
+  loadAvg: true
+  loadDisk: true
+  usedFs: true
+  topTalkersNetwork: true
+  networkStat: true
 
 log:
   level: "info"
@@ -15,4 +15,4 @@ log:
     
 server:
   host: "localhost"
-  port: 8000
+  port: 8100

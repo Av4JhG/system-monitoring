@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/Av4JhG/system-monitoring/internal/sm"
+	"github.com/benbjohnson/clock"
 )
 
 type clients struct {
@@ -16,12 +17,14 @@ type clients struct {
 	clients     clientsList // список клиентов
 	toClientsCh <-chan sm.MetricsData
 	log         sm.Logger
+	clock       clock.Clock
 }
 
 // NewClients возвращает сервис клиентов.
-func NewClients(log sm.Logger) sm.Clients {
+func NewClients(log sm.Logger, clock clock.Clock) sm.Clients {
 	return &clients{
-		log: log,
+		log:   log,
+		clock: clock,
 	}
 }
 
@@ -93,7 +96,7 @@ func (c *clients) NewClient(cl sm.ClientData) (<-chan *sm.Stats, func(), error) 
 	default:
 	}
 
-	now := time.Now().Truncate(time.Second)
+	now := c.clock.Now().Truncate(time.Second)
 	client := newClient(cl, now)
 
 	c.clients = append(c.clients, client)
@@ -111,7 +114,6 @@ func (c *clients) NewClient(cl sm.ClientData) (<-chan *sm.Stats, func(), error) 
 func (c *clients) sendStat(data *sm.MetricsData) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
-
 	if len(c.clients) == 0 {
 		return
 	}

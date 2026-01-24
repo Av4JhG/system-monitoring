@@ -35,12 +35,67 @@ message UsedFS {
   double UsedInode = 3;
 }
 
+message ProtocolStats {
+  string protocol = 1;
+  uint64 bytes = 2;
+  double percent = 3;
+}
+
+message ProtocolStatsResponse {
+  repeated ProtocolStats stats = 1;
+  uint64 total_bytes = 2;
+}
+
+message TrafficStats {
+  string source = 1;
+  string destination = 2;
+  string protocol = 3;
+  double bps = 4;
+  uint64 bytes = 5;
+  double packets_rate = 6;
+}
+
+message TrafficStatsResponse {
+  repeated TrafficStats stats = 1;
+}
+
+message ListeningSocket {
+  string command = 1;
+  int32 pid = 2;
+  string user = 3;
+  string protocol = 4;
+  int32 port = 5;
+  string address = 6;
+}
+
+message ListeningSocketResponse {
+  repeated ListeningSocket sockets = 1;
+}
+
+message TCPStateCount {
+  string state = 1;
+  int32 count = 2;
+}
+
+message TCPStatesResponse {
+  repeated TCPStateCount TCPStates = 1;
+  int32 total_connections = 2;
+}
+
+message NetworkStats {
+  ProtocolStatsResponse protocol_stats = 1;
+  TrafficStatsResponse traffic_stats = 2;
+  ListeningSocketResponse listening_sockets = 3;
+  TCPStatesResponse tcp_states = 4;
+}
+
 message SystemStatistics {
   google.protobuf.Timestamp time = 1;
   LoadAvg load_avg = 2;
   CPU cpu = 3;
   repeated LoadDisk load_disks = 4;
   repeated UsedFS used_fs = 5;
+  NetworkStats network_statistics = 6;
 }
 
 message SystemStatisticsRequest {

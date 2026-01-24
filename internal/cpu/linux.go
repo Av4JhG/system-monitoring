@@ -16,7 +16,6 @@ func getCPU() (*cpuData, error) {
 	if err != nil {
 		return nil, fmt.Errorf("cannot read the stat file: %w", err)
 	}
-
 	return parseCPU(content)
 }
 

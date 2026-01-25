@@ -24,3 +24,6 @@
 {"time":"2026-01-24 16:50:22","level":"INFO","msg":"system monitor is running..."}
 {"time":"2026-01-24 16:50:53","level":"INFO","msg":"stopping system monitor..."}
 {"time":"2026-01-24 16:50:53","level":"INFO","msg":"system monitor is stopped"}
+{"time":"2026-01-25 20:27:38","level":"INFO","msg":"starting system monitor"}
+{"time":"2026-01-25 20:27:38","level":"INFO","msg":"time to keep metrics: ","!BADKEY":600,"!BADKEY":" seconds"}
+{"time":"2026-01-25 20:27:38","level":"INFO","msg":"system monitor is running..."}

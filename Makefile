@@ -16,6 +16,14 @@ run: build
 version: build
 	$(BIN) version
 
+.PHONY: test
+test:
+	go test -race -count=100 ./...
+
+.PHONY: test-integr
+integration-test:
+	go test -race -count=1 -tags integration ./tests/integration
+
 
 install-lint-deps:
 	(which golangci-lint > /dev/null) || curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v2.7.2

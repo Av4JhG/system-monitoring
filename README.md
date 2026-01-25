@@ -1,3 +1,4 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/Av4JhG/system-monitoring)](https://goreportcard.com/report/github.com/Av4JhG/system-monitoring)
 # Демон, осуществляющий "Системный мониторинг"
 
 ## Общее описание

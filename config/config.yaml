@@ -15,4 +15,4 @@ log:
     
 server:
   host: "localhost"
-  port: 8100
+  port: 8000

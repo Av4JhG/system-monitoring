@@ -1,16 +1,21 @@
 PROJECT_DIR := $(CURDIR)
+DOCKER_IMG="sm_client:develop"
 BIN := "./bin/system_monitoring_daemon"
 BUILD_DATE := $(shell date -u +%Y-%m-%dT%H:%M:%S)
 GIT_HASH := $(shell git log --format="%h" -n 1)
 LDFLAGS := -X main.buildDate=$(BUILD_DATE) -X main.gitHash=$(GIT_HASH)
 
+# Сборка бинарника демона
 .PHONY: build
 build:
 	go build -v -o $(BIN) -ldflags "$(LDFLAGS)" ./cmd/daemon
 
-.PHONY: run
-run: build
-	LOG_LEVEL=DEBUG $(BIN) -config ./config/config.yaml
+# Сборка образа докер для клиента
+build-img:
+	docker build \
+		--build-arg=LDFLAGS="$(LDFLAGS)" \
+		-t $(DOCKER_IMG) \
+		-f build/Dockerfile .
 
 .PHONY: version
 version: build
@@ -20,7 +25,7 @@ version: build
 test:
 	go test -race -count=100 ./...
 
-.PHONY: test-integr
+.PHONY: integration-test
 integration-test:
 	go test -race -count=1 -tags integration ./tests/integration
 

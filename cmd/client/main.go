@@ -22,7 +22,7 @@ var (
 
 func init() {
 	flag.StringVar(&metric, "show", "la", "Show metrics. Possible values: la|cpu|disk|fs")
-	flag.StringVar(&port, "port", "8000", "Choose listen port. For example: :8000")
+	flag.StringVar(&port, "port", ":8000", "Choose listen port. For example: :8000")
 	flag.IntVar(&n, "n", 1, "Send stats every N seconds")
 	flag.IntVar(&m, "m", 1, "Send stats for last M seconds")
 }

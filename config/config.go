@@ -78,7 +78,7 @@ func configure(v *viper.Viper) {
 	v.SetDefault("app.maxSeconds", MaxSeconds)
 	v.SetDefault("log.level", "INFO")
 	v.SetDefault("log.file", "app.log")
-	v.SetDefault("server.port", "8100")
+	v.SetDefault("server.port", "8000")
 	v.SetDefault("server.host", "localhost")
 	v.SetDefault("metric.loadAvg", true)
 	v.SetDefault("metric.cpu", true)

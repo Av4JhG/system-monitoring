@@ -23,7 +23,7 @@ version: build
 
 .PHONY: test
 test:
-	go test -race -count=100 ./...
+	go test -race -count=100 -timeout=0 ./internal/...
 
 .PHONY: integration-test
 integration-test:

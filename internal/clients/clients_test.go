@@ -5,13 +5,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Av4JhG/system-monitoring/internal/mocks"
+	"github.com/Av4JhG/system-monitoring/internal/sm"
 	"github.com/benbjohnson/clock"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/goleak"
-
-	"github.com/Av4JhG/system-monitoring/internal/mocks"
-	"github.com/Av4JhG/system-monitoring/internal/sm"
 )
 
 func TestClientsStartStop(t *testing.T) {

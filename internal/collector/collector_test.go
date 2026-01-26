@@ -6,10 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
-	"go.uber.org/goleak"
-
 	conf "github.com/Av4JhG/system-monitoring/config"
 	"github.com/Av4JhG/system-monitoring/internal/cpu"
 	loadavg "github.com/Av4JhG/system-monitoring/internal/load_avg"
@@ -17,6 +13,9 @@ import (
 	"github.com/Av4JhG/system-monitoring/internal/mocks"
 	"github.com/Av4JhG/system-monitoring/internal/sm"
 	usedfs "github.com/Av4JhG/system-monitoring/internal/used_fs"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
+	"go.uber.org/goleak"
 )
 
 func TestCollectorStartStop(t *testing.T) {

@@ -8,9 +8,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/Av4JhG/system-monitoring/internal/core"
+	"github.com/stretchr/testify/require"
 )
 
 func TestReadOut(t *testing.T) {

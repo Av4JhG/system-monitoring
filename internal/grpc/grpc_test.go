@@ -5,12 +5,11 @@ import (
 	"testing"
 	"time"
 
+	conf "github.com/Av4JhG/system-monitoring/config"
+	"github.com/Av4JhG/system-monitoring/internal/mocks"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/goleak"
-
-	conf "github.com/Av4JhG/system-monitoring/config"
-	"github.com/Av4JhG/system-monitoring/internal/mocks"
 )
 
 func TestGRPCStartStop(t *testing.T) {

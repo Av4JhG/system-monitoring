@@ -7,11 +7,10 @@ import (
 	"testing"
 	"time"
 
+	grpcClient "github.com/Av4JhG/system-monitoring/pb"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-
-	grpcClient "github.com/Av4JhG/system-monitoring/pb"
 )
 
 // интеграционный тест.
@@ -62,6 +61,7 @@ func compile() error {
 }
 
 func getMetrics(t *testing.T) *grpcClient.SystemStatistics {
+	t.Helper()
 	conn, err := grpc.NewClient(":8000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	require.NoError(t, err)
 	defer conn.Close()
@@ -84,6 +84,7 @@ func getMetrics(t *testing.T) *grpcClient.SystemStatistics {
 }
 
 func getCPU(t *testing.T) float64 {
+	t.Helper()
 	conn, err := grpc.NewClient(":8000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	require.NoError(t, err)
 	defer conn.Close()
@@ -108,9 +109,7 @@ func getCPU(t *testing.T) float64 {
 func load(dur time.Duration) {
 	begin := time.Now()
 
-	for {
-		if time.Since(begin) > dur {
-			break
-		}
+	for time.Since(begin) <= dur {
+		continue
 	}
 }

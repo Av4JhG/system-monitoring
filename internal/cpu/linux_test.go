@@ -8,9 +8,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/Av4JhG/system-monitoring/internal/core"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseCPU(t *testing.T) {

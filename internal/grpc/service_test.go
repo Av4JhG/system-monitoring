@@ -8,6 +8,10 @@ import (
 	"testing"
 	"time"
 
+	conf "github.com/Av4JhG/system-monitoring/config"
+	"github.com/Av4JhG/system-monitoring/internal/mocks"
+	"github.com/Av4JhG/system-monitoring/internal/sm"
+	protobuf "github.com/Av4JhG/system-monitoring/pb"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
@@ -15,11 +19,6 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
-
-	conf "github.com/Av4JhG/system-monitoring/config"
-	"github.com/Av4JhG/system-monitoring/internal/mocks"
-	"github.com/Av4JhG/system-monitoring/internal/sm"
-	protobuf "github.com/Av4JhG/system-monitoring/pb"
 )
 
 func TestGRPC(t *testing.T) {
@@ -187,8 +186,9 @@ func dialer(listener *bufconn.Listener) func(context.Context, string) (net.Conn,
 }
 
 func getConnect(t *testing.T, listener *bufconn.Listener) *grpc.ClientConn {
-	// ctx := context.Background()
-	conn, err := grpc.NewClient(":0", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithContextDialer(dialer(listener)))
+	t.Helper()
+	conn, err := grpc.NewClient(":0", grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithContextDialer(dialer(listener)))
 	require.NoError(t, err)
 	return conn
 }

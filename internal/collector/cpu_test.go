@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
-
 	"github.com/Av4JhG/system-monitoring/internal/mocks"
 	"github.com/Av4JhG/system-monitoring/internal/sm"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestCPU(t *testing.T) {

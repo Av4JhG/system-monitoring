@@ -4,9 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/Av4JhG/system-monitoring/internal/sm"
+	"github.com/stretchr/testify/require"
 )
 
 var (

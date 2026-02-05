@@ -23,10 +23,18 @@ jobs:
           run: make lint
           working-directory: ./
 
-        - name: build project
+        - name: build daemon
           run: make build
           working-directory: ./
+        
+        - name: build client
+          run: make build-img
+          working-directory: ./
 
-        # - name: test project
-        #   run: make test
-        #   working-directory: ./
+        - name: test project
+          run: make test
+          working-directory: ./
+        
+        - name: integration test
+          run: make integration-test
+          working-directory: ./

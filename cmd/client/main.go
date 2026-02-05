@@ -15,12 +15,14 @@ import (
 
 var (
 	metric string
+	port   string
 	n      int
 	m      int
 )
 
 func init() {
 	flag.StringVar(&metric, "show", "la", "Show metrics. Possible values: la|cpu|disk|fs")
+	flag.StringVar(&port, "port", ":8000", "Choose listen port. For example: :8000")
 	flag.IntVar(&n, "n", 1, "Send stats every N seconds")
 	flag.IntVar(&m, "m", 1, "Send stats for last M seconds")
 }
@@ -55,7 +57,7 @@ type (
 func runClient(ph printHeader, ps printStats) error {
 	ph()
 
-	conn, err := grpc.NewClient(":8100", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(port, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return err
 	}

@@ -6,6 +6,9 @@ import (
 	"time"
 )
 
+// ErrStopped ошибка, возвращаемая grpc запросу, если приложение останавливается.
+var ErrStopped = errors.New("service is stopped")
+
 // Collector представляет сервис, запускающий каждую секунду сбор статистики и ее отправку клиентам.
 type Collector interface {
 	Start(context.Context, MetricCollectors, chan<- MetricsData)
@@ -24,9 +27,6 @@ type Clients interface {
 	Stop(context.Context)
 	NewClienter
 }
-
-// ErrStopped ошибка, возвращаемая grpc запросу, если приложение останавливается.
-var ErrStopped = errors.New("service is stopped")
 
 // CollectorToClientsCh - канал для посекундной передачи накопленных данных сервису клиентов.
 type CollectorToClientsCh chan MetricsData
@@ -77,53 +77,6 @@ type MetricCollectors struct {
 	CPU       CPU
 	LoadDisks LoadDisks
 	UsedFS    UsedFS
-}
-
-// LoadAvg - функция возвращающая среднюю загрузку системы.
-type LoadAvg func(ctx context.Context) (*LoadAvgData, error)
-
-// LoadAvgData содержит метрики средней загрузки системы.
-type LoadAvgData struct {
-	Load1  float64
-	Load5  float64
-	Load15 float64
-}
-
-// CPU - функция возвращающая среднюю загрузку cpu.
-type CPU func(ctx context.Context, action MetricCommand) (*CPUData, error)
-
-// CPUData содержит метрики средней загрузки cpu. В процентах.
-type CPUData struct {
-	User   float64
-	System float64
-	Idle   float64
-}
-
-// LoadDisks - функция возвращающая загрузку дисков.
-type LoadDisks func(ctx context.Context, action MetricCommand) (LoadDisksData, error)
-
-// LoadDisksData - слайс информации о загрузке дисков.
-type LoadDisksData []DiskData
-
-// DiskData содержит метрики загрузки дисков.
-type DiskData struct {
-	Name    string
-	Tps     float64
-	KBRead  float64
-	KBWrite float64
-}
-
-// UsedFS - функция возвращающая использование файловых систем.
-type UsedFS func(ctx context.Context, action MetricCommand) (UsedFSData, error)
-
-// UsedFSData - слайс информации об использовании файловых систем.
-type UsedFSData []FSData
-
-// FSData содержит информацию об использовании файловой системы.
-type FSData struct {
-	Path      string
-	UsedSpace float64
-	UsedInode float64
 }
 
 // GRPCServer представляет gRPC сервер.
